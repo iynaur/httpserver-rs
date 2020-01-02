@@ -1,13 +1,17 @@
 use std::io::{self, BufReader, BufRead, Read, Write};
 use std::fs::File;
 use std::net::{TcpListener,TcpStream};
+use std::env;
 
 pub struct Http;
 impl Http
 {
-    pub fn new(){
-        println!("rust serve start bind 0.0.0.0:7878");
-        let listener = TcpListener::bind("0.0.0.0:7878").unwrap();
+    pub fn new(ip_port : String){
+        let dir = env::current_dir().unwrap();
+        println!("The current directory is {}", dir.display());
+        
+        println!("{}", "rust serve start bind ".to_string() + &ip_port);
+        let listener = TcpListener::bind(ip_port).unwrap();
         for stream in listener.incoming() {
             let stream = stream.unwrap();
             Self::handle_connection(stream);
